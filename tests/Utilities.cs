@@ -69,7 +69,6 @@ namespace ArtPortfolio.Tests
                 new Project() { Name ="Project4", MainPhotoName="ProjectMainImage4", Description="Crazy Project 4"}
             };
         }
-
         public static async Task<ProjectImage> GetProjectImageAsync(ArtPortfolioDbContext ctx, string ProjectImageName = "Image1")
         {
             await SeedDbAsync(ctx);
