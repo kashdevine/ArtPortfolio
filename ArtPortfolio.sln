@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtPortfolio", "ArtPortfolio.csproj", "{AE7797B4-927C-493E-8492-39B2899DD6B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtPortfolio.Tests", "ArtPortfolio.Tests\ArtPortfolio.Tests.csproj", "{677E6029-CF1D-4622-A252-908AC778B003}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArtPortfolio.Tests", "..\tests\ArtPortfolio.Tests.csproj", "{C06FEFC1-ADD0-40C7-91A1-59E0E88F7284}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{AE7797B4-927C-493E-8492-39B2899DD6B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE7797B4-927C-493E-8492-39B2899DD6B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE7797B4-927C-493E-8492-39B2899DD6B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{677E6029-CF1D-4622-A252-908AC778B003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{677E6029-CF1D-4622-A252-908AC778B003}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{677E6029-CF1D-4622-A252-908AC778B003}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{677E6029-CF1D-4622-A252-908AC778B003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C06FEFC1-ADD0-40C7-91A1-59E0E88F7284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C06FEFC1-ADD0-40C7-91A1-59E0E88F7284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C06FEFC1-ADD0-40C7-91A1-59E0E88F7284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C06FEFC1-ADD0-40C7-91A1-59E0E88F7284}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
