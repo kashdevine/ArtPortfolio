@@ -28,9 +28,9 @@ namespace ArtPortfolio.Tests
                 await ctx.Database.EnsureCreatedAsync();
             }
 
-            ctx.Remove(ctx.ProjectImages);
-            ctx.Remove(ctx.ProjectVideos);
-            ctx.Remove(ctx.Projects);
+            ctx.ProjectImages.RemoveRange(ctx.ProjectImages);
+            ctx.ProjectVideos.RemoveRange(ctx.ProjectVideos);
+            ctx.Projects.RemoveRange(ctx.Projects);
             
 
             await SeedDbAsync(ctx);

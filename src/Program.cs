@@ -2,6 +2,8 @@ using Serilog;
 using Microsoft.OpenApi.Models;
 using ArtPortfolio.Data;
 using Microsoft.EntityFrameworkCore;
+using ArtPortfolio.Contract;
+using ArtPortfolio.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,8 @@ builder.Services.AddDbContext<ArtPortfolioDbContext>(opt =>
     var connstring = builder.Configuration.GetConnectionString("ArtPortfolioDb");
     opt.UseSqlServer(connstring);
 });
+
+builder.Services.AddTransient<IProjectImageRepository, ProjectImageRepository>();
 
 var app = builder.Build();
 
