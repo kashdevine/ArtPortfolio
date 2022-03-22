@@ -14,29 +14,58 @@ namespace ArtPortfolio.Services
         {
             _ctx = ctx;
         }
-        public Task<ProjectImage> CreateProjectImage(ProjectImage image, CancellationToken token)
+        public async Task<ProjectImage> CreateProjectImage(ProjectImage image, CancellationToken token = default)
+        {
+            if (image == null)
+            {
+                throw new ArgumentNullException(nameof(image));
+            }
+
+            await _ctx.ProjectImages.AddAsync(image);
+
+            var isSaved = await Save(token);
+
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+
+            if (!isSaved)
+            {
+                throw new Exception();
+            }
+
+            return image;
+        }
+
+        public Task<bool> DeleteImageAsync(Guid id, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteImageAsync(Guid id, CancellationToken token)
+        public Task<ProjectImage> GetImageAsync(Guid id, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ProjectImage> GetImageAsync(Guid id, CancellationToken token)
+        public Task<IEnumerable<ProjectImage>> GetImagesAsync(CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ProjectImage>> GetImagesAsync(CancellationToken token)
+        public Task<ProjectImage> UpdateImageAsync(ProjectImage image, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ProjectImage> UpdateImageAsync(ProjectImage image, CancellationToken token)
+        /// <summary>
+        /// Saves the current changes to the database.
+        /// </summary>
+        /// <param name="token">Cancellation Token.</param>
+        /// <returns>A bool.</returns>
+        private async Task<bool> Save(CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            return await _ctx.SaveChangesAsync(token) > 0;
         }
     }
 }
