@@ -77,5 +77,19 @@ namespace ArtPortfolio.Tests.ProjectImageTests
             //assert
             Assert.True(result.Count() > 0);
         }
+
+        [Fact]
+        public async Task UpdateImageAsync_Should_Return_TheUpdatedImage()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var changedValue = "This is now changed.";
+            var expected = await Utilities.GetProjectImageAsync(_ctx);
+            expected.Name = changedValue;
+            //act
+            var result = await _sut.UpdateImageAsync(expected);
+            //assert
+            Assert.Equal(expected, result);
+        }
     }
 }

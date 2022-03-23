@@ -15,6 +15,7 @@ namespace ArtPortfolio.Services
         {
             _ctx = ctx;
         }
+
         public async Task<ProjectImage> CreateProjectImage(ProjectImage image, CancellationToken token = default)
         {
             if (image == null)
@@ -45,7 +46,7 @@ namespace ArtPortfolio.Services
 
             if (objToDelete == null)
             {
-                return false;
+                throw new ArgumentNullException();
             }
 
             if (token.IsCancellationRequested)
@@ -76,9 +77,25 @@ namespace ArtPortfolio.Services
             return _ctx.ProjectImages.Where(pi => pi.Name != "");
         }
 
-        public Task<ProjectImage> UpdateImageAsync(ProjectImage image, CancellationToken token = default)
+        public async Task<ProjectImage> UpdateImageAsync(ProjectImage image, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+
+            if (!_ctx.ProjectImages.Any(img => img.Id == image.Id))
+            {
+                throw new InvalidOperationException(String.Format("{0} could not be found to be updated.", image));
+            }
+            _ctx.ProjectImages.Update(image);
+
+            var isSaved = await Save(token);
+            if (!isSaved)
+            {
+                throw new Exception(String.Format("Could not save {0} to database.", image));
+            }
+            return image;
         }
 
         /// <summary>

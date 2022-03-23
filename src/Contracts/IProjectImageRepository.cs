@@ -26,6 +26,8 @@ namespace ArtPortfolio.Contract
         /// <param name="image">A project image object.</param>
         /// <param name="token">Canellation token.</param>
         /// <returns>Newly created project image.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="Exception"></exception>
         public Task<ProjectImage> CreateProjectImage(ProjectImage image, CancellationToken token = default);
         /// <summary>
         /// Updates a project image.
@@ -33,6 +35,8 @@ namespace ArtPortfolio.Contract
         /// <param name="image">A project image object.</param>
         /// <param name="token">Cancellation token.</param>
         /// <returns>Updated project image.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="Exception"></exception>
         public Task<ProjectImage> UpdateImageAsync(ProjectImage image, CancellationToken token = default);
         /// <summary>
         /// Deletes a project id in the DB.
@@ -40,6 +44,7 @@ namespace ArtPortfolio.Contract
         /// <param name="id">A Guid.</param>
         /// <param name="token">Cancellation token.</param>
         /// <returns>A boolean.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public Task<bool> DeleteImageAsync(Guid id, CancellationToken token = default);
     }
 }
