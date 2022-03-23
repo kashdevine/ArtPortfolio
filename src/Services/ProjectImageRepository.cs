@@ -57,9 +57,14 @@ namespace ArtPortfolio.Services
             return await Save(token);
         }
 
-        public Task<ProjectImage> GetImageAsync(Guid id, CancellationToken token = default)
+        public async Task<ProjectImage> GetImageAsync(Guid id, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+
+            return await _ctx.ProjectImages.FirstOrDefaultAsync(img => img.Id == id);
         }
 
         public Task<IEnumerable<ProjectImage>> GetImagesAsync(CancellationToken token = default)

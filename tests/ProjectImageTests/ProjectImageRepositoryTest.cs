@@ -54,5 +54,17 @@ namespace ArtPortfolio.Tests.ProjectImageTests
             //assert
             Assert.True(result);
         }
+        
+        [Fact]
+        public async Task GetImageAsync_Should_Return_ImageIfItExists()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = await Utilities.GetProjectImageAsync(_ctx);
+            //act
+            var result = await _sut.GetImageAsync(expected.Id);
+            //assert
+            Assert.Equal(expected, result);
+        }
     }
 }
