@@ -42,5 +42,17 @@ namespace ArtPortfolio.Tests.ProjectImageTests
             Assert.Equal(expected, result);
 
         }
+        
+        [Fact]
+        public async Task DeleteImageAsync_Should_Return_True_IfImageIsDeleted()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var deletedObject = await Utilities.GetProjectImageAsync(_ctx);
+            //act
+            var result = await _sut.DeleteImageAsync(deletedObject.Id);
+            //assert
+            Assert.True(result);
+        }
     }
 }

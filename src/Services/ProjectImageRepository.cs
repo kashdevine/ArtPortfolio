@@ -1,6 +1,7 @@
 ﻿using ArtPortfolio.Contract;
 using ArtPortfolio.Data;
 using ArtPortfolio.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArtPortfolio.Services
 {
@@ -32,15 +33,28 @@ namespace ArtPortfolio.Services
 
             if (!isSaved)
             {
-                throw new Exception();
+                throw new Exception(String.Format("Could not create {0} in database.", image));
             }
 
             return image;
         }
 
-        public Task<bool> DeleteImageAsync(Guid id, CancellationToken token = default)
+        public async Task<bool> DeleteImageAsync(Guid id, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            var objToDelete = await _ctx.ProjectImages.FirstAsync(img => img.Id == id);
+
+            if (objToDelete == null)
+            {
+                return false;
+            }
+
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+
+            _ctx.ProjectImages.Remove(objToDelete);
+            return await Save(token);
         }
 
         public Task<ProjectImage> GetImageAsync(Guid id, CancellationToken token = default)
@@ -67,5 +81,6 @@ namespace ArtPortfolio.Services
         {
             return await _ctx.SaveChangesAsync(token) > 0;
         }
+        
     }
 }
