@@ -67,9 +67,13 @@ namespace ArtPortfolio.Services
             return await _ctx.ProjectImages.FirstOrDefaultAsync(img => img.Id == id);
         }
 
-        public Task<IEnumerable<ProjectImage>> GetImagesAsync(CancellationToken token = default)
+        public async Task<IEnumerable<ProjectImage>> GetImagesAsync(CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            return _ctx.ProjectImages.Where(pi => pi.Name != "");
         }
 
         public Task<ProjectImage> UpdateImageAsync(ProjectImage image, CancellationToken token = default)
