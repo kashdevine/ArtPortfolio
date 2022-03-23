@@ -54,5 +54,42 @@ namespace ArtPortfolio.Tests.ProjectImageTests
             //assert
             Assert.True(result);
         }
+        
+        [Fact]
+        public async Task GetImageAsync_Should_Return_ImageIfItExists()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = await Utilities.GetProjectImageAsync(_ctx);
+            //act
+            var result = await _sut.GetImageAsync(expected.Id);
+            //assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public async Task GetImagesAsync_Should_Return_ListOfImages()
+        {
+            //arramge
+            await Utilities.ReInitializeTestDb(_ctx);
+            //act
+            var result = await _sut.GetImagesAsync();
+            //assert
+            Assert.True(result.Count() > 0);
+        }
+
+        [Fact]
+        public async Task UpdateImageAsync_Should_Return_TheUpdatedImage()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var changedValue = "This is now changed.";
+            var expected = await Utilities.GetProjectImageAsync(_ctx);
+            expected.Name = changedValue;
+            //act
+            var result = await _sut.UpdateImageAsync(expected);
+            //assert
+            Assert.Equal(expected, result);
+        }
     }
 }
