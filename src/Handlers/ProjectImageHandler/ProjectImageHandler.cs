@@ -32,17 +32,20 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
             if (imageFile == null) { throw new ArgumentNullException(nameof(imageFile)); };
 
             var fileExtension = Path.GetExtension(fileName);
-            var finalFileName = String.Format("{0}.{1}", image.Id, fileExtension);
+            var finalFileName = String.Format("{0}{1}", image.Id, fileExtension);
 
             var imageDirPath = Path.Combine(_env.ContentRootPath, image.ProjectId.ToString());
 
             var imageFilePath = Path.Combine(imageDirPath, finalFileName);
 
-
-            using(var fs = new FileStream(imageDirPath, FileMode.Create))
+            if (!Directory.Exists(imageDirPath)) 
             {
-                var destination = new FileStream(imageFilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
-                fs.CopyToAsync(destination);
+                Directory.CreateDirectory(imageDirPath);
+            }
+
+            using(var fs = new FileStream(imageFilePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                imageFile.CopyToAsync(fs);
             }
             return true;
         }
