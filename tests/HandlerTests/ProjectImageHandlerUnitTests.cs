@@ -11,6 +11,7 @@ using Xunit;
 using Moq;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.Extensions.Hosting;
 
 namespace ArtPortfolio.Tests.HandlerTests
 {
@@ -28,7 +29,7 @@ namespace ArtPortfolio.Tests.HandlerTests
                     .Options;
             _ctx = new ArtPortfolioDbContext(dbContextOptions);
 
-            var basePath = "c:\\";
+            var basePath = Path.GetFullPath(@"C:\Users\kashe\Desktop");
             var testDir = Path.Combine(basePath, "testfolder");
 
             var mockWebHost = new Mock<IWebHostEnvironment>();
