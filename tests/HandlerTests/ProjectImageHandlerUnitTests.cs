@@ -12,6 +12,7 @@ using Moq;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.Extensions.Hosting;
+using ArtPortfolio.Models;
 
 namespace ArtPortfolio.Tests.HandlerTests
 {
@@ -21,6 +22,7 @@ namespace ArtPortfolio.Tests.HandlerTests
         private IProjectImageHandler _sut;
         private ArtPortfolioDbContext _ctx;
         private Mock<IFormFile> _file;
+        private Mock<IWebHostEnvironment> mockWebHost;
 
         public ProjectImageHandlerUnitTests()
         {
@@ -32,7 +34,7 @@ namespace ArtPortfolio.Tests.HandlerTests
             var basePath = Path.GetFullPath(@"C:\Users\kashe\Desktop");
             var testDir = Path.Combine(basePath, "testfolder");
 
-            var mockWebHost = new Mock<IWebHostEnvironment>();
+            mockWebHost = new Mock<IWebHostEnvironment>();
             mockWebHost.SetupGet(w => w.ContentRootPath).Returns(testDir);
 
             _file = new Mock<IFormFile>();
@@ -58,6 +60,48 @@ namespace ArtPortfolio.Tests.HandlerTests
 
             //assert
             Assert.True(result);
+        }
+
+        [Fact]
+        public async Task DeleteImage_Should_Delete_TheSpecifiedFile()
+        {
+            //arrange
+            var projectId = Guid.Parse("ae54138a-2b33-4704-bc9b-d5cb51b9574b");
+
+            var mediaObject = await CreateTestFileToDelete(_ctx);
+            mediaObject.ProjectId = projectId;
+
+            //act
+            var result = _sut.DeleteImage(_file.Object, mediaObject);
+
+            //assert
+            Assert.True(result);
+        }
+
+
+
+
+        private async Task<ProjectImage> CreateTestFileToDelete(ArtPortfolioDbContext _ctx) 
+        {
+            var testFile = await  Utilities.GetProjectImageAsync(_ctx);
+            var basePath = Path.GetFullPath(@"C:\Users\kashe\Desktop");
+            var testDir = Path.Combine(basePath, "testfolder", "ae54138a-2b33-4704-bc9b-d5cb51b9574b");
+
+            var finalFileName = String.Format("{0}.png", testFile.Id);
+
+            var testFileLocation = Path.Combine(testDir, finalFileName);
+
+            if (!Directory.Exists(testDir))
+            {
+                Directory.CreateDirectory(testDir);
+            }
+
+            using (var fs = new FileStream(testFileLocation, FileMode.Create))
+            {
+                fs.CopyToAsync(fs);
+            }
+
+            return testFile;
         }
     }
 }

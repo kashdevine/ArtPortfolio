@@ -24,6 +24,6 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
         /// <param name="imageFile">IFromfile object</param>
         /// <param name="image">Project Image object</param>
         /// <returns>A boolean.</returns>
-        public Task<bool> DeleteImage(IFormFile imageFile, ProjectImage image);
+        public bool DeleteImage(IFormFile imageFile, ProjectImage image);
     }
 }
