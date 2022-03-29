@@ -78,6 +78,24 @@ namespace ArtPortfolio.Tests.HandlerTests
             Assert.True(result);
         }
 
+        [Fact]
+        public async Task GetImagePath_Should_GetThePathofAnImageIfItExists()
+        {
+            //arrange
+            var projectId = Guid.Parse("ae54138a-2b33-4704-bc9b-d5cb51b9574b");
+
+            var mediaObject = await CreateTestFileToDelete(_ctx);
+            mediaObject.ProjectId = projectId;
+
+            var expectedDir = @"C:\Users\kashe\Desktop\testfolder\ae54138a-2b33-4704-bc9b-d5cb51b9574b";
+            var expected = Path.Combine(expectedDir, mediaObject.Id.ToString());
+            //act
+            var result = _sut.GetImagePath(mediaObject);
+
+            //assert
+            Assert.Contains(expected, result);
+        }
+
 
 
 

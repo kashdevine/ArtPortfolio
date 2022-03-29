@@ -9,7 +9,7 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
         /// </summary>
         /// <param name="image">Project Image object</param>
         /// <returns>A string with the location of the image.</returns>
-        public Task<string> GetImagePath(ProjectImage image);
+        public string GetImagePath(ProjectImage image);
         /// <summary>
         /// Saves the image to the disc. The IFormfile is null but
         /// it's not optional if we want to save the image properly.
