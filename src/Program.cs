@@ -55,7 +55,7 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(
         Path.Combine(builder.Environment.ContentRootPath, builder.Configuration.GetValue<string>("ImageFileDir"))),
     RequestPath = String.Format("\\{0}", builder.Configuration.GetValue<string>("ImageFileDir"))
-}); ;
+});
 app.UseAuthorization();
 
 app.MapControllers();
