@@ -36,9 +36,22 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
             return true; 
         }
 
-        public Task<string> GetImagePath(ProjectImage image)
+        public string GetImagePath(ProjectImage image)
         {
-            throw new NotImplementedException();
+            var imageDirPath = Path.Combine(_env.ContentRootPath, image.ProjectId.ToString());
+
+            if (Directory.Exists(imageDirPath))
+            {
+                var projectFiles = Directory.EnumerateFiles(imageDirPath);
+                foreach (var projectFile in projectFiles)
+                {
+                    if (projectFile.Contains(image.Id.ToString()))
+                    {
+                        return Path.GetFullPath(projectFile);
+                    }
+                }
+            }
+            return null;
         }
 
         public async Task<bool> SaveImage(ProjectImage image, string fileName, IFormFile? imageFile)
@@ -59,7 +72,7 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
 
             using(var fs = new FileStream(imageFilePath, FileMode.Create, FileAccess.ReadWrite))
             {
-                imageFile.CopyToAsync(fs);
+                await imageFile.CopyToAsync(fs);
             }
 
             return true;
