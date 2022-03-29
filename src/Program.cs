@@ -4,6 +4,7 @@ using ArtPortfolio.Data;
 using Microsoft.EntityFrameworkCore;
 using ArtPortfolio.Contract;
 using ArtPortfolio.Services;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +50,12 @@ if (app.Environment.IsDevelopment())
 
 app.MapHealthChecks("/health");
 app.UseHttpsRedirection();
-
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, builder.Configuration.GetValue<string>("ImageFileDir"))),
+    RequestPath = String.Format("\\{0}", builder.Configuration.GetValue<string>("ImageFileDir"))
+}); ;
 app.UseAuthorization();
 
 app.MapControllers();
