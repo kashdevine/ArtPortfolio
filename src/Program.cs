@@ -50,12 +50,27 @@ if (app.Environment.IsDevelopment())
 
 app.MapHealthChecks("/health");
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+
+var ImageFileDir = builder.Configuration.GetValue<string>("ImageFileDir");
+var VideoFileDir = builder.Configuration.GetValue<string>("VideoFileDir");
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, ImageFileDir)),
+    RequestPath = String.Format("\\{0}", ImageFileDir)
+});
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, builder.Configuration.GetValue<string>("ImageFileDir"))),
-    RequestPath = String.Format("\\{0}", builder.Configuration.GetValue<string>("ImageFileDir"))
+        Path.Combine(builder.Environment.ContentRootPath, VideoFileDir)),
+    RequestPath = String.Format("\\{0}", VideoFileDir)
 });
+
 app.UseAuthorization();
 
 app.MapControllers();

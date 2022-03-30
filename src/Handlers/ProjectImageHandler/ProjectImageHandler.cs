@@ -9,17 +9,21 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
     public class ProjectImageHandler : IProjectImageHandler
     {
         private readonly IWebHostEnvironment _env;
+        private readonly IConfiguration _config;
 
-        public ProjectImageHandler(IWebHostEnvironment env)
+        public ProjectImageHandler(IWebHostEnvironment env, IConfiguration config)
         {
             _env = env;
+            _config = config;
         }
 
         public bool DeleteImage(IFormFile imageFile, ProjectImage image)
         {
             if (imageFile == null) { throw new ArgumentNullException(nameof(imageFile)); };
+            var imageDir = _config.GetValue<string>("ImageFileDir");
 
-            var imageDirPath = Path.Combine(_env.ContentRootPath, image.ProjectId.ToString());
+
+            var imageDirPath = Path.Combine(_env.ContentRootPath, imageDir, image.ProjectId.ToString());
 
             if (Directory.Exists(imageDirPath))
             {
@@ -38,7 +42,9 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
 
         public string GetImagePath(ProjectImage image)
         {
-            var imageDirPath = Path.Combine(_env.ContentRootPath, image.ProjectId.ToString());
+            var imageDir = _config.GetValue<string>("ImageFileDir");
+
+            var imageDirPath = Path.Combine(_env.ContentRootPath, imageDir, image.ProjectId.ToString());
 
             if (Directory.Exists(imageDirPath))
             {
@@ -57,11 +63,12 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
         public async Task<bool> SaveImage(ProjectImage image, string fileName, IFormFile? imageFile)
         {
             if (imageFile == null) { throw new ArgumentNullException(nameof(imageFile)); };
+            var imageDir = _config.GetValue<string>("ImageFileDir");
 
             var fileExtension = Path.GetExtension(fileName);
             var finalFileName = String.Format("{0}{1}", image.Id, fileExtension);
 
-            var imageDirPath = Path.Combine(_env.ContentRootPath, image.ProjectId.ToString());
+            var imageDirPath = Path.Combine(_env.ContentRootPath, imageDir, image.ProjectId.ToString());
             var imageFilePath = Path.Combine(imageDirPath, finalFileName);
 
             if (!Directory.Exists(imageDirPath)) 
