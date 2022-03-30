@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.Extensions.Hosting;
 using ArtPortfolio.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace ArtPortfolio.Tests.HandlerTests
 {
@@ -23,6 +24,7 @@ namespace ArtPortfolio.Tests.HandlerTests
         private ArtPortfolioDbContext _ctx;
         private Mock<IFormFile> _file;
         private Mock<IWebHostEnvironment> mockWebHost;
+        private Mock<IConfiguration> mockConfig;
 
         public ProjectImageHandlerUnitTests()
         {
@@ -37,12 +39,18 @@ namespace ArtPortfolio.Tests.HandlerTests
             mockWebHost = new Mock<IWebHostEnvironment>();
             mockWebHost.SetupGet(w => w.ContentRootPath).Returns(testDir);
 
+            var mockConfigSection = new Mock<IConfigurationSection>();
+            mockConfigSection.Setup(c => c.Value).Returns("ProjectImages");
+
+            mockConfig = new Mock<IConfiguration>();
+            mockConfig.Setup(m => m.GetSection(It.Is<string>(s => s == "ImageFileDir"))).Returns(mockConfigSection.Object);
+
             _file = new Mock<IFormFile>();
             _file.SetupGet(f => f.FileName).Returns("FakeFile");
             _file.SetupGet(f => f.Length).Returns(81290);
             _file.SetupGet(f=> f.ContentType).Returns("image/jpeg");
 
-            _sut = new ProjectImageHandler(mockWebHost.Object);
+            _sut = new ProjectImageHandler(mockWebHost.Object, mockConfig.Object);
         }
 
         [Fact]
@@ -87,7 +95,7 @@ namespace ArtPortfolio.Tests.HandlerTests
             var mediaObject = await CreateTestFileToDelete(_ctx);
             mediaObject.ProjectId = projectId;
 
-            var expectedDir = @"C:\Users\kashe\Desktop\testfolder\ae54138a-2b33-4704-bc9b-d5cb51b9574b";
+            var expectedDir = @"C:\Users\kashe\Desktop\testfolder\ProjectImages\ae54138a-2b33-4704-bc9b-d5cb51b9574b";
             var expected = Path.Combine(expectedDir, mediaObject.Id.ToString());
             //act
             var result = _sut.GetImagePath(mediaObject);
@@ -103,7 +111,7 @@ namespace ArtPortfolio.Tests.HandlerTests
         {
             var testFile = await  Utilities.GetProjectImageAsync(_ctx);
             var basePath = Path.GetFullPath(@"C:\Users\kashe\Desktop");
-            var testDir = Path.Combine(basePath, "testfolder", "ae54138a-2b33-4704-bc9b-d5cb51b9574b");
+            var testDir = Path.Combine(basePath, "testfolder", "ProjectImages", "ae54138a-2b33-4704-bc9b-d5cb51b9574b");
 
             var finalFileName = String.Format("{0}.png", testFile.Id);
 
