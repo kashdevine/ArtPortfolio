@@ -68,6 +68,23 @@ namespace ArtPortfolio.Tests.HandlerTests
 
             //assert
             Assert.True(result);
+        }        
+        
+        [Fact]
+        public async Task SaveImage_Should_Update_ProjectImageObjectWithPath()
+        {
+            //arrange
+            var initialFileName = "TestImage.png";
+            var projectId = Guid.Parse("ae54138a-2b33-4704-bc9b-d5cb51b9574b");
+
+            var mediaObject = await Utilities.GetProjectImageAsync(_ctx);
+            mediaObject.ProjectId = projectId;
+
+            //act
+            var result = await _sut.SaveImage(mediaObject, initialFileName, _file.Object);
+
+            //assert
+            Assert.NotNull(mediaObject.FullFilePath);
         }
 
         [Fact]

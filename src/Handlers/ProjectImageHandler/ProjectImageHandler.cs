@@ -80,6 +80,7 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
             using(var fs = new FileStream(imageFilePath, FileMode.Create, FileAccess.ReadWrite))
             {
                 await imageFile.CopyToAsync(fs);
+                image.FullFilePath = imageFilePath;
             }
 
             return true;
