@@ -49,6 +49,7 @@ namespace ArtPortfolio.Tests.HandlerTests
             _file.SetupGet(f => f.FileName).Returns("FakeFile.jpg");
             _file.SetupGet(f => f.Length).Returns(81290);
             _file.SetupGet(f=> f.ContentType).Returns("image/jpeg");
+            _file.SetupGet(f=> f.Name).Returns("FakeFile");
 
             _sut = new ProjectImageHandler(mockWebHost.Object, mockConfig.Object);
         }
