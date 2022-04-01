@@ -46,7 +46,7 @@ namespace ArtPortfolio.Tests.HandlerTests
             mockConfig.Setup(m => m.GetSection(It.Is<string>(s => s == "ImageFileDir"))).Returns(mockConfigSection.Object);
 
             _file = new Mock<IFormFile>();
-            _file.SetupGet(f => f.FileName).Returns("FakeFile");
+            _file.SetupGet(f => f.FileName).Returns("FakeFile.jpg");
             _file.SetupGet(f => f.Length).Returns(81290);
             _file.SetupGet(f=> f.ContentType).Returns("image/jpeg");
 
@@ -57,14 +57,14 @@ namespace ArtPortfolio.Tests.HandlerTests
         public async Task SaveImage_Should_Create_ALocalDirectoryWithTheFile()
         {
             //arrange
-            var initialFileName = "TestImage.png";
             var projectId = Guid.Parse("ae54138a-2b33-4704-bc9b-d5cb51b9574b");
 
             var mediaObject = await Utilities.GetProjectImageAsync(_ctx);
             mediaObject.ProjectId = projectId;
+      
 
             //act
-            var result = await _sut.SaveImage(mediaObject, initialFileName, _file.Object);
+            var result = await _sut.SaveImage(mediaObject , _file.Object);
 
             //assert
             Assert.True(result);
@@ -74,14 +74,13 @@ namespace ArtPortfolio.Tests.HandlerTests
         public async Task SaveImage_Should_Update_ProjectImageObjectWithPath()
         {
             //arrange
-            var initialFileName = "TestImage.png";
             var projectId = Guid.Parse("ae54138a-2b33-4704-bc9b-d5cb51b9574b");
 
             var mediaObject = await Utilities.GetProjectImageAsync(_ctx);
             mediaObject.ProjectId = projectId;
 
             //act
-            var result = await _sut.SaveImage(mediaObject, initialFileName, _file.Object);
+            var result = await _sut.SaveImage(mediaObject ,_file.Object);
 
             //assert
             Assert.NotNull(mediaObject.FullFilePath);

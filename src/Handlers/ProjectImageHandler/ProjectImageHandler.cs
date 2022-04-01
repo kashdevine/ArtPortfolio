@@ -60,12 +60,12 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
             return null;
         }
 
-        public async Task<bool> SaveImage(ProjectImage image, string fileName, IFormFile? imageFile)
+        public async Task<bool> SaveImage(ProjectImage image, IFormFile? imageFile)
         {
             if (imageFile == null) { throw new ArgumentNullException(nameof(imageFile)); };
             var imageDir = _config.GetValue<string>("ImageFileDir");
 
-            var fileExtension = Path.GetExtension(fileName);
+            var fileExtension = Path.GetExtension(imageFile.FileName);
             var finalFileName = String.Format("{0}{1}", image.Id, fileExtension);
 
             var imageDirPath = Path.Combine(_env.ContentRootPath, imageDir, image.ProjectId.ToString());

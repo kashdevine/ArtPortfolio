@@ -18,7 +18,7 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
         /// <param name="imageFile">IFormfile Object</param>
         /// <param name="image">Project Image</param>
         /// <returns>A boolean.</returns>
-        public Task<bool> SaveImage(ProjectImage image, string fileName, IFormFile? imageFile = null);
+        public Task<bool> SaveImage(ProjectImage image, IFormFile? imageFile = null);
         /// <summary>
         /// Deletes the image from the disc.
         /// </summary>
