@@ -13,6 +13,7 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
         /// <summary>
         /// Saves the image to the disc. The IFormfile is null but
         /// it's not optional if we want to save the image properly.
+        /// Also sets the full path property for the Project Image.
         /// </summary>
         /// <param name="imageFile">IFormfile Object</param>
         /// <param name="image">Project Image</param>
