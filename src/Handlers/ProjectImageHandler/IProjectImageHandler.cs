@@ -26,5 +26,11 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
         /// <param name="image">Project Image object</param>
         /// <returns>A boolean.</returns>
         public bool DeleteImage(IFormFile imageFile, ProjectImage image);
+        /// <summary>
+        /// Delete the image from the disc.
+        /// </summary>
+        /// <param name="image">Project Image object.</param>
+        /// <returns>A boolean.</returns>
+        public bool DeleteImage(ProjectImage image);
     }
 }

@@ -22,7 +22,6 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
             if (imageFile == null) { throw new ArgumentNullException(nameof(imageFile)); };
             var imageDir = _config.GetValue<string>("ImageFileDir");
 
-
             var imageDirPath = Path.Combine(_env.ContentRootPath, imageDir, image.ProjectId.ToString());
 
             if (Directory.Exists(imageDirPath))
@@ -38,6 +37,23 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
             }
 
             return true; 
+        }
+
+        public bool DeleteImage(ProjectImage image)
+        {
+            if (image.FullFilePath == null)
+            {
+                    return false;
+            }
+
+            if (image.FullFilePath != null)
+            {
+                using (var fs = new FileStream(image.FullFilePath, FileMode.Open, FileAccess.Read))
+                {
+                    Directory.Delete(image.FullFilePath);
+                }
+            }
+            return true;
         }
 
         public string GetImagePath(ProjectImage image)
