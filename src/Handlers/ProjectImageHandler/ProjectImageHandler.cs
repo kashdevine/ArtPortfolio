@@ -46,13 +46,8 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
                     return false;
             }
 
-            if (image.FullFilePath != null)
-            {
-                using (var fs = new FileStream(image.FullFilePath, FileMode.Open, FileAccess.Read))
-                {
-                    Directory.Delete(image.FullFilePath);
-                }
-            }
+            File.Delete(image.FullFilePath);
+
             return true;
         }
 
