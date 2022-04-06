@@ -23,20 +23,20 @@ namespace ArtPortfolio.Contracts
         /// <param name="projectVideo">ProjectVideo Object</param>
         /// <param name="token">Cancellation token</param>
         /// <returns>Newly created projectvideo object.</returns>
-        public Task<ProjectVideo> CreateProjectVideo(ProjectVideo projectVideo, CancellationToken token = default);
+        public Task<ProjectVideo> CreateProjectVideoAsync(ProjectVideo projectVideo, CancellationToken token = default);
         /// <summary>
         /// Updates an existing project video entry.
         /// </summary>
         /// <param name="projectVideo">ProjectVideo Object.</param>
         /// <param name="token">Cancellation token.</param>
         /// <returns>Updated project video.</returns>
-        public Task<ProjectVideo> UpdateProjectVideo(ProjectVideo projectVideo, CancellationToken token = default);
+        public Task<ProjectVideo> UpdateProjectVideoAsync(ProjectVideo projectVideo, CancellationToken token = default);
         /// <summary>
         /// Deletes an existing project video.
         /// </summary>
         /// <param name="id">A Guid.</param>
         /// <param name="token">Cancellation token.</param>
         /// <returns>A boolean based on the outcome.</returns>
-        public Task<bool> DeleteProjectVideo(Guid id, CancellationToken token = default);
+        public Task<bool> DeleteProjectVideoAsync(Guid id, CancellationToken token = default);
     }
 }

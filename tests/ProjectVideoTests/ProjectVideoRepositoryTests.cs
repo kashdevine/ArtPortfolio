@@ -1,5 +1,6 @@
 ﻿using ArtPortfolio.Contracts;
 using ArtPortfolio.Data;
+using ArtPortfolio.Models;
 using ArtPortfolio.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,5 +26,76 @@ namespace ArtPortfolio.Tests.ProjectVideoTests
             _ctx = new ArtPortfolioDbContext(dbContextOptions);
             _sut = new ProjectVideoRepository(_ctx);
         }
+
+        [Fact]
+        public async Task CreateProjectVideoAsync_Should_Return_TheCreatedVideo()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = new ProjectVideo() { Name = "CreatedVideo", Description = "CreatedProjectTest", LinkURI = "google.com" };
+
+            //act
+            var result = await _sut.CreateProjectVideoAsync(expected);
+
+            //assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public async Task DeleteProjectVideoAsync_Should_Return_TrueIfVideoIsDeleted()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = await Utilities.GetProjectVideoAsync(_ctx);
+
+            //act
+            var result = await _sut.DeleteProjectVideoAsync(expected.Id);
+
+            //assert
+            Assert.True(result);
+        }
+        
+        [Fact]
+        public async Task GetProjectVideoAsync_Should_Return_SpecifiedVideo()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = await Utilities.GetProjectVideoAsync(_ctx);
+
+            //act
+            var result = await _sut.GetProjectVideoAsync(expected.Id);
+
+            //assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public async Task GetProjectVideosAsync_Should_Return_CollectionOfVideos()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+
+            //act
+            var result = await _sut.GetProjectVideosAsync();
+
+            //assert
+            Assert.True(result.Count() > 0);
+        }
+
+        [Fact]
+        public async Task UpdateProjectVideoAsync_Should_Return_UpdatedVideo()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = await Utilities.GetProjectVideoAsync(_ctx);
+            expected.Name = "Now I am updated";
+
+            //act
+            var result = await _sut.UpdateProjectVideoAsync(expected);
+
+            //assert
+            Assert.Equal(expected, result);
+        }
     }
 }
+
