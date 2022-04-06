@@ -1,9 +1,13 @@
 ﻿using ArtPortfolio.Contracts;
 using ArtPortfolio.Data;
 using ArtPortfolio.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArtPortfolio.Services
 {
+    /// <summary>
+    /// <inheritdoc cref="IProjectVideoRepository"/>
+    /// </summary>
     public class ProjectVideoRepository : IProjectVideoRepository
     {
         private readonly ArtPortfolioDbContext _ctx;
@@ -11,29 +15,79 @@ namespace ArtPortfolio.Services
         {
             _ctx = ctx;
         }
-        public Task<ProjectVideo> CreateProjectVideo(ProjectVideo projectVideo, CancellationToken token = default)
+        public async Task<ProjectVideo> CreateProjectVideoAsync(ProjectVideo projectVideo, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+               token.ThrowIfCancellationRequested();
+            }
+            await _ctx.ProjectVideos.AddAsync(projectVideo);
+            if (!await Save(token))
+            {
+                throw new Exception(String.Format("Could not create project video at {0}", nameof(CreateProjectVideoAsync)));
+            }
+            return projectVideo;
         }
 
-        public Task<bool> DeleteProjectVideo(Guid id, CancellationToken token = default)
+        public async Task<bool> DeleteProjectVideoAsync(Guid id, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            var doesExistObject = await _ctx.ProjectVideos.FirstOrDefaultAsync(x => x.Id == id);
+            if (doesExistObject == null)
+            {
+                throw new Exception(String.Format("A video with id {0} does not exist", id));
+            }
+            
+            _ctx.Remove(doesExistObject);
+            return await Save(token);
         }
 
-        public Task<ProjectVideo> GetProjectVideoAsync(Guid id, CancellationToken token = default)
+        public async Task<ProjectVideo> GetProjectVideoAsync(Guid id, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            return await _ctx.ProjectVideos.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<IEnumerable<ProjectVideo>> GetProjectVideosAsync(CancellationToken token = default)
+        public async Task<IEnumerable<ProjectVideo>> GetProjectVideosAsync(CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+
+            return await _ctx.ProjectVideos.Where(x => x.Id != null).ToListAsync();
         }
 
-        public Task<ProjectVideo> UpdateProjectVideo(ProjectVideo projectVideo, CancellationToken token = default)
+        public async Task<ProjectVideo> UpdateProjectVideoAsync(ProjectVideo projectVideo, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            if (! await _ctx.ProjectVideos.AnyAsync(x => x.Id == projectVideo.Id))
+            {
+                throw new Exception(String.Format("Could not update video at {0}", nameof(UpdateProjectVideoAsync)));
+            }
+            _ctx.ProjectVideos.Update(projectVideo);
+            await Save(token);
+
+            return projectVideo;
+        }
+
+        /// <summary>
+        /// Saves pending changes.
+        /// </summary>
+        /// <param name="token">Cancellation Token.</param>
+        /// <returns>A boolean.</returns>
+        private async Task<bool> Save(CancellationToken token = default)
+        {
+            return await _ctx.SaveChangesAsync(token) > 0;
         }
     }
 }
