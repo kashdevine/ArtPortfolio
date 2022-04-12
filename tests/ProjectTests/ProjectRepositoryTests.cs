@@ -40,5 +40,59 @@ namespace ArtPortfolio.Tests.ProjectTests
             //assert
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public async Task DeleteProjectAsync_Should_Return_TrueIfEntityIsDeleted()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var target = await Utilities.GetProjectAsync(_ctx);
+
+            //act
+            var result = await _sut.DeleteProjectAsync(target.Id);
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task GetProjectAsync_Should_Return_SpecifiedProject()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = await Utilities.GetProjectAsync(_ctx);
+            //act
+            var result = await _sut.GetProjectAsync(expected.Id);
+
+            //assert
+            Assert.Equal(expected,result);
+        }
+
+        [Fact]
+        public async Task GetProjectsAsync_Should_Return_CollectionOfProjects()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            //act
+            var result = await _sut.GetProjectsAsync();
+
+            //assert
+            Assert.Equal(result.Count(), 4);
+        }
+
+        [Fact]
+        public async Task UpdateProject_Should_Return_UpdatedProject()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = await Utilities.GetProjectAsync(_ctx);
+            expected.Name = "This is updated now";
+
+            //act
+            var result = await _sut.UpdateProject(expected);
+
+            //assert
+            Assert.Equal(expected, result);
+        }
     }
 }
