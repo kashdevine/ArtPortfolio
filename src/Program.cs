@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ArtPortfolio.Contract;
 using ArtPortfolio.Services;
 using Microsoft.Extensions.FileProviders;
+using ArtPortfolio.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,8 @@ builder.Services.AddDbContext<ArtPortfolioDbContext>(opt =>
 });
 
 builder.Services.AddTransient<IProjectImageRepository, ProjectImageRepository>();
+builder.Services.AddTransient<IProjectVideoRepository, ProjectVideoRepository>();
+builder.Services.AddTransient<IProjectRepository, ProjectRepository>();
 
 var app = builder.Build();
 
