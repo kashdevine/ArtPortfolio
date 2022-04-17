@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Moq;
 using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
 
 namespace ArtPortfolio.Tests.JWTests
 {
@@ -42,6 +43,22 @@ namespace ArtPortfolio.Tests.JWTests
 
 
             _sut = new JWTService(_mockConfig.Object);
+        }
+
+        [Fact]
+        public void GetAccessToken_Returns_A_TokenString()
+        {
+            //arrange
+            var testClaims = new[] { 
+                new Claim("Test", "Value"),
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.Email, "fakemail@gmail.com")
+            };
+            //act
+            var result = _sut.GetAccessToken(testClaims);
+
+            //assert
+            Assert.NotNull(result);
         }
     }
 }
