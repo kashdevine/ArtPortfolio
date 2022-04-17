@@ -60,5 +60,15 @@ namespace ArtPortfolio.Tests.JWTests
             //assert
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public void GetRefreshtoken_Returns_ARefreshTokenString()
+        {
+            //arrange
+            //act
+            var result = _sut.GetRefreshtoken();
+            //assert
+            Assert.NotNull(result);
+        }
     }
 }

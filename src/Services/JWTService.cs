@@ -37,7 +37,22 @@ namespace ArtPortfolio.Services
 
         public string GetRefreshtoken()
         {
-            throw new NotImplementedException();
+            var refreshClaims = new[] { new Claim(ClaimTypes.Role, "RefreshToken") };
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JWT:Secret")));
+
+            var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            var jwtHeader = new JwtHeader(creds);
+
+            var payload = new JwtPayload(_config.GetValue<string>("JWT:Issuer"),
+                                        _config.GetValue<string>("JWT:Audience"),
+                                        refreshClaims,
+                                        DateTime.UtcNow,
+                                        DateTime.Today.AddDays(_config.GetValue<int>("JWT:RefreshTokenExpiration"))
+                                        );
+            var refreshToken = new JwtSecurityToken(jwtHeader, payload);
+            return new JwtSecurityTokenHandler().WriteToken(refreshToken);
+
         }
 
         public ClaimsPrincipal VerifyAccessToken(string token)
