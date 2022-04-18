@@ -55,9 +55,11 @@ namespace ArtPortfolio.Services
 
         }
 
-        public ClaimsPrincipal VerifyAccessToken(string token)
+        public IEnumerable<Claim> VerifyAccessToken(string token)
         {
-            throw new NotImplementedException();
+            var jwtToken = GetToken(token);
+
+            return jwtToken == null ? Enumerable.Empty<Claim>() : jwtToken.Claims;
         }
 
         public bool VerifyRefeshToken(string refeshToken)

@@ -83,5 +83,17 @@ namespace ArtPortfolio.Tests.JWTests
             Assert.True(result);
         }
 
+        [Fact]
+        public void VerifyAccessToken_Returns_ClaimsFromTheToken()
+        {
+            //arrange
+            var testToken = Utilities.GetAccessToken();
+            //act
+            var result = _sut.VerifyAccessToken(testToken);
+
+            //assert
+            Assert.True(result.Count() > 0);
+        }
+
     }
 }

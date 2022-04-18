@@ -107,5 +107,28 @@ namespace ArtPortfolio.Tests
             var refreshToken = new JwtSecurityToken(jwtHeader, payload);
             return new JwtSecurityTokenHandler().WriteToken(refreshToken);
         }
+
+        public static string GetAccessToken()
+        {
+            var claims = new[] {
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim("test", "TestClaim")
+            };
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is a secrect"));
+
+            var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            var jwtHeader = new JwtHeader(creds);
+
+            var payload = new JwtPayload("artportfolio.art",
+                                        "artportfolio.art",
+                                        claims,
+                                        DateTime.UtcNow,
+                                        DateTime.Today.AddDays(5)
+                                        );
+            var jwtToken = new JwtSecurityToken(jwtHeader, payload);
+
+            return new JwtSecurityTokenHandler().WriteToken(jwtToken);
+        }
     }
 }
