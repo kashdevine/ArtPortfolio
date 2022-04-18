@@ -1,9 +1,12 @@
 ﻿using ArtPortfolio.Data;
 using ArtPortfolio.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,6 +87,25 @@ namespace ArtPortfolio.Tests
         {
             await SeedDbAsync(ctx);
             return await ctx.Projects.FirstOrDefaultAsync(i => i.Name == ProjectName);
+        }
+
+        public static string GetRefreshToken()
+        {
+            var refreshClaims = new[] { new Claim(ClaimTypes.Role, "RefreshToken") };
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is a secrect"));
+
+            var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            var jwtHeader = new JwtHeader(creds);
+
+            var payload = new JwtPayload("artportfolio.art",
+                                        "artportfolio.art",
+                                        refreshClaims,
+                                        DateTime.UtcNow,
+                                        DateTime.Today.AddDays(10)
+                                        );
+            var refreshToken = new JwtSecurityToken(jwtHeader, payload);
+            return new JwtSecurityTokenHandler().WriteToken(refreshToken);
         }
     }
 }

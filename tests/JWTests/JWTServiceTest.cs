@@ -70,5 +70,18 @@ namespace ArtPortfolio.Tests.JWTests
             //assert
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public void VerifyRefeshToken_Returns_TrueIfTheTokenIsValidated()
+        {
+            //arrange
+            var testToken = Utilities.GetRefreshToken();
+            //act
+            var result = _sut.VerifyRefeshToken(testToken);
+
+            //assert
+            Assert.True(result);
+        }
+
     }
 }

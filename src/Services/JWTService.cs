@@ -62,7 +62,44 @@ namespace ArtPortfolio.Services
 
         public bool VerifyRefeshToken(string refeshToken)
         {
-            throw new NotImplementedException();
+            var token = GetToken(refeshToken);
+            var refreshClaim = token.Claims.First(c => c.Value == "RefreshToken");
+
+            if (refreshClaim == null || token.ValidTo < DateTime.Today)
+            {
+                return false;
+            }
+
+            return true;
+            
+        }
+
+        private JwtSecurityToken GetToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config.GetValue<string>("JWT:Secret"));
+            var tokenValParameters = new TokenValidationParameters()
+            {
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidIssuer = _config.GetValue<string>("JWT:Issuer"),
+                ValidateIssuer = true,
+                ValidateIssuerSigningKey = true,
+                ValidAudience = _config.GetValue<string>("JWT:Audience"),
+                ValidateAudience = true,
+            };
+
+            try
+            {
+                tokenHandler.ValidateToken(token, tokenValParameters, out SecurityToken finalToken);
+
+                return (JwtSecurityToken) finalToken;
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(String.Format("Could not verify the token at {0}", nameof(VerifyRefeshToken)),e);
+            }
+
         }
     }
 }
