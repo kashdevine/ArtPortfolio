@@ -60,5 +60,40 @@ namespace ArtPortfolio.Tests.JWTests
             //assert
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public void GetRefreshtoken_Returns_ARefreshTokenString()
+        {
+            //arrange
+            //act
+            var result = _sut.GetRefreshtoken();
+            //assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void VerifyRefeshToken_Returns_TrueIfTheTokenIsValidated()
+        {
+            //arrange
+            var testToken = Utilities.GetRefreshToken();
+            //act
+            var result = _sut.VerifyRefeshToken(testToken);
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void VerifyAccessToken_Returns_ClaimsFromTheToken()
+        {
+            //arrange
+            var testToken = Utilities.GetAccessToken();
+            //act
+            var result = _sut.VerifyAccessToken(testToken);
+
+            //assert
+            Assert.True(result.Count() > 0);
+        }
+
     }
 }

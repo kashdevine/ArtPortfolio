@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
+builder.Services.AddCors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
@@ -73,6 +74,13 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(builder.Environment.ContentRootPath, VideoFileDir)),
     RequestPath = String.Format("\\{0}", VideoFileDir)
 });
+
+app.UseCors(opt =>
+    opt.AllowAnyHeader()
+    .AllowCredentials()
+    .AllowAnyMethod()
+    .WithOrigins(new[] { "http://localhost:3000" })
+);
 
 app.UseAuthorization();
 

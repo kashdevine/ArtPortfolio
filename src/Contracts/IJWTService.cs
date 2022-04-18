@@ -1,5 +1,7 @@
 ﻿namespace ArtPortfolio.Contracts
 {
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
 
     public interface IJWTService
@@ -26,6 +28,6 @@
         /// </summary>
         /// <param name="token">JWT Token</param>
         /// <returns>Claim Principal</returns>
-        public ClaimsPrincipal VerifyAccessToken(string token);
+        public IEnumerable<Claim> VerifyAccessToken(string token);
     }
 }
