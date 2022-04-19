@@ -6,6 +6,8 @@ using ArtPortfolio.Contract;
 using ArtPortfolio.Services;
 using Microsoft.Extensions.FileProviders;
 using ArtPortfolio.Contracts;
+using ArtPortfolio.Models;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,29 @@ builder.Services.AddDbContext<ArtPortfolioDbContext>(opt =>
 {
     var connstring = builder.Configuration.GetConnectionString("ArtPortfolioDb");
     opt.UseSqlServer(connstring);
+});
+
+builder.Services.AddIdentityCore<ProjectUser>().AddRoles<ProjectUserRole>();
+builder.Services.Configure<IdentityOptions>(opt =>
+{
+    opt.Password.RequiredUniqueChars = 1;
+    opt.Password.RequireDigit = true;
+    opt.Password.RequiredLength = 8;
+    opt.Password.RequireLowercase = true;
+    opt.Password.RequireUppercase = true;
+
+    opt.Lockout.AllowedForNewUsers = true;
+    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    opt.Lockout.MaxFailedAccessAttempts = 5;
+
+    opt.User.RequireUniqueEmail = true;
+});
+
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    opt.Cookie.Name = builder.Configuration.GetValue<string>("CookieDefaultName");
+    opt.ExpireTimeSpan = TimeSpan.FromMinutes(50);
+    opt.Cookie.HttpOnly = true;
 });
 
 builder.Services.AddTransient<IProjectImageRepository, ProjectImageRepository>();

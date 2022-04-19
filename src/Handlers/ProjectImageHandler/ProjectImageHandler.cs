@@ -21,7 +21,7 @@ namespace ArtPortfolio.Handlers.ProjectImageHandler
         {
             if (imageFile == null) { throw new ArgumentNullException(nameof(imageFile)); };
             var imageDir = _config.GetValue<string>("ImageFileDir");
-
+            if (image.ProjectId == null) { throw new Exception(String.Format("{0} is missing a project id", image)); }
             var imageDirPath = Path.Combine(_env.ContentRootPath, imageDir, image.ProjectId.ToString());
 
             if (Directory.Exists(imageDirPath))
