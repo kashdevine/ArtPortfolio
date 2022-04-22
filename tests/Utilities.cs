@@ -1,5 +1,6 @@
 ﻿using ArtPortfolio.Data;
 using ArtPortfolio.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -25,6 +26,14 @@ namespace ArtPortfolio.Tests
             await ctx.SaveChangesAsync();
         }
 
+        public static async Task SeedUserDbAsync(ArtPortfolioUserDbContext ctx)
+        {
+            ctx.Users.AddRangeAsync(GetProjectUsers());
+            ctx.Roles.AddAsync(new ProjectUserRole() { Name = "Admin" });
+
+            ctx.SaveChangesAsync();
+        }
+
         public static async Task ReInitializeTestDb(ArtPortfolioDbContext ctx)
         {
             if (!await ctx.Database.CanConnectAsync()) {
@@ -38,6 +47,30 @@ namespace ArtPortfolio.Tests
 
             await SeedDbAsync(ctx);
 
+        }
+
+        public static async Task ReintializeTestUserDb(ArtPortfolioUserDbContext ctx)
+        {
+            if (!await ctx.Database.CanConnectAsync()){
+                await ctx.Database.EnsureCreatedAsync();
+            }
+
+            ctx.Users.RemoveRange(ctx.Users);
+            ctx.Roles.RemoveRange(ctx.Roles);
+
+            await SeedUserDbAsync(ctx);
+        }
+
+        public static List<ProjectUser> GetProjectUsers()
+        {
+            return new List<ProjectUser>()
+            {
+                new ProjectUser() {FirstName = "testUser1", LastName="testlastname1", Email = "user1@gmail.com", UserName="username1"},
+                new ProjectUser() {FirstName = "testUser2", LastName="testlastname2", Email = "user2@gmail.com", UserName="username2"},
+                new ProjectUser() {FirstName = "testUser3", LastName="testlastname3", Email = "user3@gmail.com", UserName="username3"},
+                new ProjectUser() {FirstName = "testUser4", LastName="testlastname4", Email = "user4@gmail.com", UserName="username4"},
+                new ProjectUser() {FirstName = "testUser5", LastName="testlastname5", Email = "user5@gmail.com", UserName="username5"},
+            };
         }
 
         public static List<ProjectImage> SeedProjectImges()
