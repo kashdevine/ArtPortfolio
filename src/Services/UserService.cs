@@ -8,10 +8,14 @@ namespace ArtPortfolio.Services
     {
         private UserManager<ProjectUser> _userManager;
         private RoleManager<ProjectUserRole> _roleManager;
-        public UserService(UserManager<ProjectUser> userManager, RoleManager<ProjectUserRole> roleManager)
+        private SignInManager<ProjectUser> _signInManager;
+        public UserService(UserManager<ProjectUser> userManager, 
+            RoleManager<ProjectUserRole> roleManager,
+            SignInManager<ProjectUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
         public Task<bool> DeleteUser(Guid id)
         {
