@@ -1,11 +1,12 @@
 ﻿using ArtPortfolio.Models;
+using ArtPortfolio.Models.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtPortfolio.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -19,6 +20,24 @@ namespace ArtPortfolio.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDTO login)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("passwordreset")]
+        public async Task<IActionResult> PasswordReset(ResetPasswordDTO dto)
+        {
+            throw new NotImplementedException();
         }
     }
 }
