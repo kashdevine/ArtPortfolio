@@ -5,6 +5,7 @@ using ArtPortfolio.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,12 @@ namespace ArtPortfolio.Tests.UserTests
 
             _ctx = new ArtPortfolioUserDbContext(dbContextOptions);
             _sut = new AuthController(_mockUserManager.Object, _mockRoleManager.Object, _mockSignInManager.Object);
+        }
+
+        [Fact]
+        public async Task Login_Should_Return_OKStatusAtLogin()
+        {
+            throw new NotImplementedException();
         }
     }
 }
