@@ -67,6 +67,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
 builder.Services.AddTransient<IProjectImageRepository, ProjectImageRepository>();
 builder.Services.AddTransient<IProjectVideoRepository, ProjectVideoRepository>();
 builder.Services.AddTransient<IProjectRepository, ProjectRepository>();
+builder.Services.AddTransient<IAuthHelpers, AuthHelpers>();
 builder.Services.AddTransient<IJWTService, JWTService>();
 
 var app = builder.Build();
