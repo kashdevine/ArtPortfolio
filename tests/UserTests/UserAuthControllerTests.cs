@@ -22,6 +22,7 @@ using System.Threading;
 
 namespace ArtPortfolio.Tests.UserTests
 {
+    [Collection("PortfolioTests")]
     public class UserAuthControllerTests
     {
         private ArtPortfolioUserDbContext _ctx;
@@ -59,8 +60,11 @@ namespace ArtPortfolio.Tests.UserTests
             _mockIJWTService.Setup(x => x.GetRefreshtoken()).Returns("AccessToken");
 
             _mockUserManager.Setup(x => x.GetClaimsAsync(It.IsAny<ProjectUser>())).ReturnsAsync(testClaimList);
+            _mockUserManager.Setup(x => x.ChangePasswordAsync(It.IsAny<ProjectUser>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            _mockUserManager.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ProjectUser());
 
             _mockSignInManager.Setup(x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+            _mockSignInManager.Setup(x => x.SignOutAsync());
 
             _ctx = new ArtPortfolioUserDbContext(dbContextOptions);
             _sut = new AuthController(_mockUserManager.Object,
@@ -76,6 +80,30 @@ namespace ArtPortfolio.Tests.UserTests
 
             //act
             var result = await _sut.Login(loginDto);
+
+            //assert
+            Assert.IsType<OkResult>(result);
+        }
+
+        [Fact]
+        public async Task Logout_Should_Return_OkStatusAtLogout()
+        {
+            //arrange
+            //act
+            var result = await _sut.Logout();
+
+            //assert
+            Assert.IsType<OkResult>(result);
+        }
+
+        [Fact]
+        public async Task ResetPassword_Should_Return_OkStatusAfterReset()
+        {
+            //arrange
+            var resetPasswordDto = new ResetPasswordDTO() { UserId = "abcedfghijklmnop", Password = "Password123!", NewPassword = "NewPassword123!" };
+
+            //act
+            var result = await _sut.PasswordReset(resetPasswordDto);
 
             //assert
             Assert.IsType<OkResult>(result);

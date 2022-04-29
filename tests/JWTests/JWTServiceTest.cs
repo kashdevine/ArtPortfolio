@@ -12,6 +12,7 @@ using System.Security.Claims;
 
 namespace ArtPortfolio.Tests.JWTests
 {
+    [Collection("PortfolioTests")]
     public class JWTServiceTest
     {
         private IJWTService _sut;

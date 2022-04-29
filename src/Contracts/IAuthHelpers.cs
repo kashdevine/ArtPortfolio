@@ -21,5 +21,11 @@ namespace ArtPortfolio.Contracts
         /// <param name="refreshToken">A refresh JWT token.</param>
         /// <param name="response">HttpResponse Object from the controller.</param>
         public void SetTokens(string accessToken, string refreshToken, HttpResponse response);
+
+        /// <summary>
+        /// Deletes the access token and refresh token.
+        /// </summary>
+        /// <param name="response">HttpResponse Object from the controller.</param>
+        public void DeleteTokens(HttpResponse response);
     }
 }

@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace ArtPortfolio.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -19,7 +19,6 @@ namespace ArtPortfolio.Controllers
         private SignInManager<ProjectUser> _signInManager;
         private IJWTService _jwt;
         private IAuthHelpers _authHelpers;
-        private ILogger<AuthController> _logger;
         public AuthController(UserManager<ProjectUser> userManager,
             RoleManager<ProjectUserRole> roleManager,
             SignInManager<ProjectUser> signInManager,
@@ -33,7 +32,14 @@ namespace ArtPortfolio.Controllers
             _authHelpers = authHelpers;
         }
 
+        /// <summary>
+        /// Login a user using username and password
+        /// </summary>
+        /// <param name="login">A Login DTO object</param>
+        /// <returns>200 status on successful login</returns>
         [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login(LoginDTO login)
         {
             // Ensure the login information is correct
@@ -54,16 +60,41 @@ namespace ArtPortfolio.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Logs out the user. 
+        /// </summary>
+        /// <returns>200 status if logout was successful.</returns>
         [HttpPost("logout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Logout()
         {
-            throw new NotImplementedException();
+            await _signInManager.SignOutAsync();
+            _authHelpers.DeleteTokens(Response);
+
+            return Ok();
         }
 
+        /// <summary>
+        /// Resets the password for the user.
+        /// </summary>
+        /// <param name="dto">A Resetpassword DTO</param>
+        /// <returns>200 status if the reset is successful.</returns>
         [HttpPost("passwordreset")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PasswordReset(ResetPasswordDTO dto)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.Password, dto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }
