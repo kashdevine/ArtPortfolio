@@ -11,6 +11,15 @@ namespace ArtPortfolio.Services
     /// </summary>
     public class AuthHelpers : IAuthHelpers
     {
+        private readonly string AccessJWT = "Accessjwt";
+        private readonly string RefreshToken = "Refreshtoken";
+
+        public void DeleteTokens(HttpResponse response)
+        {
+            response.Cookies.Delete(AccessJWT);
+            response.Cookies.Delete(RefreshToken);
+        }
+
         public async Task<IList<Claim>> GetUserClaimsAsync(string userName, UserManager<ProjectUser> userManager)
         {
             //Get the user to generate a token
@@ -23,8 +32,8 @@ namespace ArtPortfolio.Services
         public void SetTokens(string accessToken, string refreshToken, HttpResponse response)
         {
             // Append JWT and Refresh Token
-            response.Cookies.Append("Accessjwt", accessToken);
-            response.Cookies.Append("Refreshtoken", refreshToken);
+            response.Cookies.Append(AccessJWT, accessToken);
+            response.Cookies.Append(RefreshToken, refreshToken);
         }
     }
 }
