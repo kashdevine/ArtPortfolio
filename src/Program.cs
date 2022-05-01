@@ -41,6 +41,12 @@ builder.Services.AddDbContext<ArtPortfolioDbContext>(opt =>
     opt.UseSqlServer(connstring);
 });
 
+builder.Services.AddDbContext<ArtPortfolioUserDbContext>(opt =>
+{
+    var connstring = builder.Configuration.GetConnectionString("ArtPortfolioDb");
+    opt.UseSqlServer(connstring);
+});
+
 builder.Services.AddIdentityCore<ProjectUser>().AddRoles<ProjectUserRole>();
 builder.Services.Configure<IdentityOptions>(opt =>
 {
@@ -67,6 +73,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
 builder.Services.AddTransient<IProjectImageRepository, ProjectImageRepository>();
 builder.Services.AddTransient<IProjectVideoRepository, ProjectVideoRepository>();
 builder.Services.AddTransient<IProjectRepository, ProjectRepository>();
+builder.Services.AddTransient<IProjectLeadRepository, ProjectLeadRepository>();
 builder.Services.AddTransient<IAuthHelpers, AuthHelpers>();
 builder.Services.AddTransient<IJWTService, JWTService>();
 
@@ -109,6 +116,7 @@ app.UseCors(opt =>
     .WithOrigins(new[] { "http://localhost:3000" })
 );
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -11,6 +11,7 @@ namespace ArtPortfolio.Data
 
         public DbSet<ProjectImage>? ProjectImages { get; set; }
         public DbSet<ProjectVideo>? ProjectVideos { get; set; }
+        public DbSet<ProjectLead>? ProjectLeads { get; set; }
         public DbSet<Project>? Projects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
