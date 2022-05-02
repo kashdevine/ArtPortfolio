@@ -22,6 +22,7 @@ namespace ArtPortfolio.Tests
             await ctx.ProjectImages!.AddRangeAsync(SeedProjectImges());
             await ctx.ProjectVideos!.AddRangeAsync(SeedProjectVideos());
             await ctx.Projects!.AddRangeAsync(SeedProjects());
+            await ctx.ProjectLeads.AddRangeAsync(SeedLeads());
 
             await ctx.SaveChangesAsync();
         }
@@ -35,6 +36,7 @@ namespace ArtPortfolio.Tests
             ctx.ProjectImages.RemoveRange(ctx.ProjectImages);
             ctx.ProjectVideos.RemoveRange(ctx.ProjectVideos);
             ctx.Projects.RemoveRange(ctx.Projects);
+            ctx.ProjectLeads.RemoveRange(ctx.ProjectLeads);
             
 
             await SeedDbAsync(ctx);
@@ -63,6 +65,17 @@ namespace ArtPortfolio.Tests
             };
         }
 
+        public static List<ProjectLead> SeedLeads()
+        {
+            return new List<ProjectLead>()
+            {
+               new ProjectLead() { FirstName = "LeadFirst1", LastName = "LeadSecond1", Message = "Message1", Email = "lead1@gmail.com", IsSpam = false},
+               new ProjectLead() { FirstName = "LeadFirst2", LastName = "LeadSecond2", Message = "Message2", Email = "lead2@gmail.com", IsSpam = false},
+               new ProjectLead() { FirstName = "LeadFirst3", LastName = "LeadSecond3", Message = "Message3", Email = "lead3@gmail.com", IsSpam = false},
+               new ProjectLead() { FirstName = "LeadFirst4", LastName = "LeadSecond4", Message = "Message4", Email = "lead4@gmail.com", IsSpam = false},
+            };
+        }
+
         public static List<Project> SeedProjects()
         {
             return new List<Project>()
@@ -74,6 +87,7 @@ namespace ArtPortfolio.Tests
             };
         }
 
+
         public static async Task<ProjectImage> GetProjectImageAsync(ArtPortfolioDbContext ctx, string ProjectImageName = "Image1")
         {
             await SeedDbAsync(ctx);
@@ -83,6 +97,11 @@ namespace ArtPortfolio.Tests
         {
             await SeedDbAsync(ctx);
             return await ctx.ProjectVideos.FirstOrDefaultAsync(v=> v.Name == ProjectVideoName);
+        }
+        public static async Task<ProjectLead> GetProjectLeadAsync(ArtPortfolioDbContext ctx, string ProjectLeadEmail = "lead1@gmail.com")
+        {
+            await SeedDbAsync(ctx);
+            return await ctx.ProjectLeads.FirstOrDefaultAsync(v => v.Email == ProjectLeadEmail);
         }
         public static async Task<Project> GetProjectAsync(ArtPortfolioDbContext ctx, string ProjectName = "Project1")
         {
