@@ -1,6 +1,7 @@
 ﻿using ArtPortfolio.Contracts;
 using ArtPortfolio.Data;
 using ArtPortfolio.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArtPortfolio.Services
 {
@@ -34,9 +35,19 @@ namespace ArtPortfolio.Services
             return projectLead;
         }
 
-        public Task<bool> DeleteLead(Guid id, CancellationToken token = default)
+        public async Task<bool> DeleteLead(Guid id, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            var deletedLead = await _ctx.ProjectLeads.Where(l => l.Id == id).FirstOrDefaultAsync();
+            if (deletedLead == null)
+            {
+                return await Save(token);
+            }
+            _ctx.Remove(deletedLead);
+            return await Save(token);
         }
 
         public Task<IEnumerable<ProjectLead>> GetAllLeads(CancellationToken token = default)
