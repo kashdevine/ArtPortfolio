@@ -40,5 +40,18 @@ namespace ArtPortfolio.Tests.ProjectLeadTests
             //assert
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public async Task Deletelead_Should_ReturnTrueIfLeadIsDeleted()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var deletedObj = await Utilities.GetProjectLeadAsync(_ctx);
+            //act
+            var result = await _sut.DeleteLead(deletedObj.Id);
+
+            //assert
+            Assert.True(result);
+        }
     }
 }
