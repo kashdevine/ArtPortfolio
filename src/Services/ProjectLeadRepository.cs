@@ -15,9 +15,23 @@ namespace ArtPortfolio.Services
         {
             _ctx = ctx;
         }
-        public Task<ProjectLead> CreateLead(ProjectLead projectLead, CancellationToken token = default)
+        public async Task<ProjectLead> CreateLead(ProjectLead projectLead, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            if (projectLead == null) 
+            { 
+                throw new ArgumentNullException(nameof(projectLead)); 
+            }
+            if (projectLead.Message == null)
+            {
+                throw new ArgumentNullException(nameof(projectLead), "The lead message cannot be null.");
+            }
+            await _ctx.ProjectLeads.AddAsync(projectLead);
+            await Save(token);
+            return projectLead;
         }
 
         public Task<bool> DeleteLead(Guid id, CancellationToken token = default)
@@ -38,6 +52,11 @@ namespace ArtPortfolio.Services
         public Task<ProjectLead> UpdateLead(ProjectLead projectLead, CancellationToken token = default)
         {
             throw new NotImplementedException();
+        }
+
+        private async Task<bool> Save(CancellationToken token = default)
+        {
+            return await _ctx.SaveChangesAsync(token) > 0; 
         }
     }
 }
