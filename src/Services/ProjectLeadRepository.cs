@@ -61,9 +61,9 @@ namespace ArtPortfolio.Services
            return await _ctx.ProjectLeads.Where(x => x.Email != null).ToListAsync();
         }
 
-        public Task<ProjectLead> GetLeadById(Guid id, CancellationToken token = default)
+        public async Task<ProjectLead> GetLeadById(Guid id, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            return await _ctx.ProjectLeads.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public Task<ProjectLead> UpdateLead(ProjectLead projectLead, CancellationToken token = default)

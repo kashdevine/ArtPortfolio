@@ -65,5 +65,19 @@ namespace ArtPortfolio.Tests.ProjectLeadTests
             //assert
             Assert.True(result.Count() >= 0);
         }
+
+        [Fact]
+        public async Task GetLeadById_Should_ReturnedSpecifiedLead()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var expected = await Utilities.GetProjectLeadAsync(_ctx);
+
+            //act
+            var result = await _sut.GetLeadById(expected.Id);
+
+            //assert
+            Assert.Equal(expected, result);
+        }
     }
 }
