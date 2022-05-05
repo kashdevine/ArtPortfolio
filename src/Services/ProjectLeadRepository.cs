@@ -18,7 +18,7 @@ namespace ArtPortfolio.Services
         }
         public async Task<ProjectLead> CreateLead(ProjectLead projectLead, CancellationToken token = default)
         {
-            var emailExist = await _ctx.ProjectLeads.AllAsync(x => x.Email == projectLead.Email);
+            var emailExist = await _ctx.ProjectLeads.AnyAsync(x => x.Email == projectLead.Email);
 
             if (token.IsCancellationRequested)
             {
@@ -58,17 +58,36 @@ namespace ArtPortfolio.Services
 
         public async Task<IEnumerable<ProjectLead>> GetAllLeads(CancellationToken token = default)
         {
-           return await _ctx.ProjectLeads.Where(x => x.Email != null).ToListAsync();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            return await _ctx.ProjectLeads.Where(x => x.Email != null).ToListAsync();
         }
 
         public async Task<ProjectLead> GetLeadById(Guid id, CancellationToken token = default)
         {
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
             return await _ctx.ProjectLeads.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task<ProjectLead> UpdateLead(ProjectLead projectLead, CancellationToken token = default)
+        public async Task<ProjectLead> UpdateLead(ProjectLead projectLead, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            var leadExists = await _ctx.ProjectLeads.AnyAsync(x => x.Id == projectLead.Id);
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            if (!leadExists)
+            {
+                throw new Exception(String.Format("Lead with email {0} doesn't exist", projectLead.Email));
+            }
+            _ctx.ProjectLeads.Update(projectLead);
+            await Save(token);
+            return projectLead;
         }
 
         private async Task<bool> Save(CancellationToken token = default)

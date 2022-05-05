@@ -79,5 +79,20 @@ namespace ArtPortfolio.Tests.ProjectLeadTests
             //assert
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public async Task UpdateLead_Should_ReturnUpdatedLead()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var updatedLead = await Utilities.GetProjectLeadAsync(_ctx);
+            updatedLead.Email = "updatedemail@yahoo.com";
+
+            //act
+            var result = await _sut.UpdateLead(updatedLead);
+
+            //assert
+            Assert.Equal(updatedLead.Email, result.Email);
+        }
     }
 }
