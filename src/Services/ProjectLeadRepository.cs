@@ -18,6 +18,8 @@ namespace ArtPortfolio.Services
         }
         public async Task<ProjectLead> CreateLead(ProjectLead projectLead, CancellationToken token = default)
         {
+            var emailExist = await _ctx.ProjectLeads.AllAsync(x => x.Email == projectLead.Email);
+
             if (token.IsCancellationRequested)
             {
                 token.ThrowIfCancellationRequested();
@@ -29,6 +31,10 @@ namespace ArtPortfolio.Services
             if (projectLead.Message == null)
             {
                 throw new ArgumentNullException(nameof(projectLead), "The lead message cannot be null.");
+            }
+            if (emailExist)
+            {
+                throw new Exception(String.Format("{0} already exists.", projectLead.Email));
             }
             await _ctx.ProjectLeads.AddAsync(projectLead);
             await Save(token);
@@ -50,9 +56,9 @@ namespace ArtPortfolio.Services
             return await Save(token);
         }
 
-        public Task<IEnumerable<ProjectLead>> GetAllLeads(CancellationToken token = default)
+        public async Task<IEnumerable<ProjectLead>> GetAllLeads(CancellationToken token = default)
         {
-            throw new NotImplementedException();
+           return await _ctx.ProjectLeads.Where(x => x.Email != null).ToListAsync();
         }
 
         public Task<ProjectLead> GetLeadById(Guid id, CancellationToken token = default)
