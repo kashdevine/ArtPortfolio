@@ -23,6 +23,7 @@ namespace ArtPortfolio.Tests
             await ctx.ProjectVideos!.AddRangeAsync(SeedProjectVideos());
             await ctx.Projects!.AddRangeAsync(SeedProjects());
             await ctx.ProjectLeads.AddRangeAsync(SeedLeads());
+            await ctx.ProjectBiographies.AddRangeAsync(SeedBios());
 
             await ctx.SaveChangesAsync();
         }
@@ -37,6 +38,7 @@ namespace ArtPortfolio.Tests
             ctx.ProjectVideos.RemoveRange(ctx.ProjectVideos);
             ctx.Projects.RemoveRange(ctx.Projects);
             ctx.ProjectLeads.RemoveRange(ctx.ProjectLeads);
+            ctx.ProjectBiographies.RemoveRange(ctx.ProjectBiographies);
             
 
             await SeedDbAsync(ctx);
@@ -76,6 +78,17 @@ namespace ArtPortfolio.Tests
             };
         }
 
+        public static List<ProjectBiography> SeedBios()
+        {
+            return new List<ProjectBiography>() 
+            { 
+                new ProjectBiography() { Body = "This a is test bio for 1", Title = "Test title 1"},
+                new ProjectBiography() { Body = "This a is test bio for 2", Title = "Test title 2"},
+                new ProjectBiography() { Body = "This a is test bio for 3", Title = "Test title 3"},
+                new ProjectBiography() { Body = "This a is test bio for 4", Title = "Test title 4"}
+            };
+        }
+
         public static List<Project> SeedProjects()
         {
             return new List<Project>()
@@ -102,6 +115,11 @@ namespace ArtPortfolio.Tests
         {
             await SeedDbAsync(ctx);
             return await ctx.ProjectLeads.FirstOrDefaultAsync(v => v.Email == ProjectLeadEmail);
+        }
+        public static async Task<ProjectBiography> GetProjectBiographyAsync(ArtPortfolioDbContext ctx, string ProjectBiographyTitle = "Test title 1")
+        {
+            await SeedDbAsync(ctx);
+            return await ctx.ProjectBiographies.FirstOrDefaultAsync(v => v.Title == ProjectBiographyTitle);
         }
         public static async Task<Project> GetProjectAsync(ArtPortfolioDbContext ctx, string ProjectName = "Project1")
         {
