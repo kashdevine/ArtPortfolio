@@ -83,5 +83,21 @@ namespace ArtPortfolio.Tests.ProjectBiographyTests
             //assert
             Assert.Equal(bio, result);
         }
+        
+        [Fact]
+        public async Task UpdateBio_Should_ReturnTheUpdatedBio()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var bio = await Utilities.GetProjectBiographyAsync(_ctx);
+            bio.Title = "This is a title";
+            bio.Body = "This is a new body";
+
+            //act
+            var result = await _sut.UpdateBio(bio);
+
+            //assert
+            Assert.Equal(bio, result);
+        }
     }
 }
