@@ -70,5 +70,18 @@ namespace ArtPortfolio.Tests.ProjectBiographyTests
             //assert
             Assert.True(result.Count() >= 0);
         }
+
+        [Fact]
+        public async Task GetBioById_Should_ReturnBioSpecified()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var bio = await Utilities.GetProjectBiographyAsync(_ctx);
+            //act
+            var result = await _sut.GetBioById(bio.Id);
+
+            //assert
+            Assert.Equal(bio, result);
+        }
     }
 }

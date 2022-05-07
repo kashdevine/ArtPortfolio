@@ -50,9 +50,13 @@ namespace ArtPortfolio.Services
             return await _ctx.ProjectBiographies.Where(x => x.Body != null).ToListAsync();
         }
 
-        public Task<ProjectBiography> GetBioById(Guid id, CancellationToken token = default)
+        public async Task<ProjectBiography> GetBioById(Guid id, CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            return await _ctx.ProjectBiographies.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<ProjectBiography> UpdateBio(ProjectBiography bio, CancellationToken token = default)
