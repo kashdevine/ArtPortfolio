@@ -14,29 +14,40 @@ namespace ArtPortfolio.Services
         {
             _ctx = ctx;
         }
-        public Task<ProjectBiography> CreateBio(ProjectBiography bio, CancellationToken token)
+        public async Task<ProjectBiography> CreateBio(ProjectBiography bio, CancellationToken token = default)
+        {
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+            await _ctx.ProjectBiographies.AddAsync(bio);
+            await Save(token);
+            return bio;
+        }
+
+        public Task<bool> DeleteBio(Guid id, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteBio(Guid id, CancellationToken token)
+        public Task<IEnumerable<ProjectBiography>> GetAllBios(CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ProjectBiography>> GetAllBios(CancellationToken token)
+        public Task<ProjectBiography> GetBioById(Guid id, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ProjectBiography> GetBioById(Guid id, CancellationToken token)
+        public Task<ProjectBiography> UpdateBio(ProjectBiography bio, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ProjectBiography> UpdateBio(ProjectBiography bio, CancellationToken token)
+        private async Task<bool> Save(CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            return await _ctx.SaveChangesAsync(token) > 0;
         }
     }
 }
