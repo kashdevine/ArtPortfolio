@@ -44,7 +44,6 @@ namespace ArtPortfolio.Tests.UserTests
             var roleStore = new Mock<IRoleStore<ProjectUserRole>>();
             var contextAccessor = new Mock<IHttpContextAccessor>();
             var claimsFactory = new Mock<IUserClaimsPrincipalFactory<ProjectUser>>();
-            var mockConfig = new Mock<IConfiguration>();
             var mockResponse = new Mock<HttpResponse>();
 
             _mockIJWTService = new Mock<IJWTService>();

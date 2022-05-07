@@ -44,5 +44,31 @@ namespace ArtPortfolio.Tests.ProjectBiographyTests
             //assert
             Assert.Equal(newObj, result);
         }
+
+        [Fact]
+        public async Task DeleteBio_Should_ReturnTrueWhenBioIsDeleted()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            var deleteTarg = await Utilities.GetProjectBiographyAsync(_ctx);
+
+            //act
+            var result = await _sut.DeleteBio(deleteTarg.Id);
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task GetAllBios_Should_ReturnListOfBios()
+        {
+            //arrange
+            await Utilities.ReInitializeTestDb(_ctx);
+            //act
+            var result = await _sut.GetAllBios();
+
+            //assert
+            Assert.True(result.Count() >= 0);
+        }
     }
 }
