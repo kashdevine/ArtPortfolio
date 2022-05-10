@@ -43,7 +43,7 @@ builder.Services.AddDbContext<ArtPortfolioDbContext>(opt =>
 
 builder.Services.AddDbContext<ArtPortfolioUserDbContext>(opt =>
 {
-    var connstring = builder.Configuration.GetConnectionString("ArtPortfolioDb");
+    var connstring = builder.Configuration.GetConnectionString("ArtPortfolioUserDb");
     opt.UseSqlServer(connstring);
 });
 
@@ -75,6 +75,7 @@ builder.Services.AddTransient<IProjectVideoRepository, ProjectVideoRepository>()
 builder.Services.AddTransient<IProjectRepository, ProjectRepository>();
 builder.Services.AddTransient<IProjectLeadRepository, ProjectLeadRepository>();
 builder.Services.AddTransient<IProjectBioRepository, ProjectBioRepository>();
+builder.Services.AddTransient<ISeedData, SeedData>();
 builder.Services.AddTransient<IAuthHelpers, AuthHelpers>();
 builder.Services.AddTransient<IJWTService, JWTService>();
 

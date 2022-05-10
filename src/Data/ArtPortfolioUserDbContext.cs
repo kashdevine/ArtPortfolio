@@ -1,4 +1,5 @@
-﻿using ArtPortfolio.Models;
+﻿using ArtPortfolio.Contracts;
+using ArtPortfolio.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
