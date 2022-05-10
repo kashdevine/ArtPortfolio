@@ -16,6 +16,7 @@ namespace ArtPortfolio.Tests
     public static class Utilities
     {
         public static readonly string ConnectionString = @"Server=(localdb)\mssqllocaldb;Database=ArtPortfolioDbTest;Trusted_Connection=True;MultipleActiveResultSets=true";
+        public static readonly string UserConnectionString = @"Server=(localdb)\mssqllocaldb;Database=ArtPortfolioUserDbTest;Trusted_Connection=True;MultipleActiveResultSets=true";
 
         public static async Task SeedDbAsync(ArtPortfolioDbContext ctx)
         {
@@ -43,6 +44,20 @@ namespace ArtPortfolio.Tests
 
             await SeedDbAsync(ctx);
 
+        }
+
+        public static async Task ReIntializeUserDb(ArtPortfolioUserDbContext ctx)
+        {
+            if (!await ctx.Database.CanConnectAsync())
+            {
+                await ctx.Database.EnsureCreatedAsync();
+            }
+
+            if (await ctx.Database.CanConnectAsync())
+            {
+                await ctx.Database.EnsureDeletedAsync();
+                await ctx.Database.EnsureCreatedAsync();
+            }
         }
 
         public static List<ProjectImage> SeedProjectImges()

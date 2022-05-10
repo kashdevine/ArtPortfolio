@@ -36,7 +36,7 @@ namespace ArtPortfolio.Tests.UserTests
         public UserAuthControllerTests()
         {
             var dbContextOptions = new DbContextOptionsBuilder<ArtPortfolioUserDbContext>()
-                                                                        .UseSqlServer(connectionString: Utilities.ConnectionString)
+                                                                        .UseSqlServer(connectionString: Utilities.UserConnectionString)
                                                                         .Options;
             var testClaimList = new List<Claim>();
 
@@ -45,6 +45,7 @@ namespace ArtPortfolio.Tests.UserTests
             var contextAccessor = new Mock<IHttpContextAccessor>();
             var claimsFactory = new Mock<IUserClaimsPrincipalFactory<ProjectUser>>();
             var mockResponse = new Mock<HttpResponse>();
+           
 
             _mockIJWTService = new Mock<IJWTService>();
             _mockAuthHelper = new Mock<IAuthHelpers>();
