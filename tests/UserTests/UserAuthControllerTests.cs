@@ -45,7 +45,9 @@ namespace ArtPortfolio.Tests.UserTests
             var contextAccessor = new Mock<IHttpContextAccessor>();
             var claimsFactory = new Mock<IUserClaimsPrincipalFactory<ProjectUser>>();
             var mockResponse = new Mock<HttpResponse>();
-           
+            var mockSeedData = new Mock<ISeedData>();
+
+
 
             _mockIJWTService = new Mock<IJWTService>();
             _mockAuthHelper = new Mock<IAuthHelpers>();
@@ -66,7 +68,10 @@ namespace ArtPortfolio.Tests.UserTests
             _mockSignInManager.Setup(x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
             _mockSignInManager.Setup(x => x.SignOutAsync());
 
-            _ctx = new ArtPortfolioUserDbContext(dbContextOptions);
+            mockSeedData.Setup(s => s.SeedAdminUser()).ReturnsAsync(true);
+
+
+            _ctx = new ArtPortfolioUserDbContext(dbContextOptions, mockSeedData.Object);
             _sut = new AuthController(_mockUserManager.Object,
                 _mockRoleManager.Object, _mockSignInManager.Object,
                 _mockIJWTService.Object, _mockAuthHelper.Object);

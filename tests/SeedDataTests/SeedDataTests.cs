@@ -36,6 +36,7 @@ namespace ArtPortfolio.Tests.SeedDataTests
             var mockAdmninEmail = new Mock<IConfigurationSection>();
             var mockAdmninFirstName = new Mock<IConfigurationSection>();
             var mockAdmninLastName = new Mock<IConfigurationSection>();
+            var mockSeedData = new Mock<ISeedData>();
             
 
 
@@ -44,6 +45,7 @@ namespace ArtPortfolio.Tests.SeedDataTests
             mockAdmninEmail.Setup(x => x.Value).Returns("testemail@gmail.com");
             mockAdmninFirstName.Setup(x => x.Value).Returns("FirstNameTest");
             mockAdmninLastName.Setup(x => x.Value).Returns("LasttNameMcTesterson");
+            mockSeedData.Setup(s => s.SeedAdminUser()).ReturnsAsync(true);
 
             _mockUserManager = new Mock<UserManager<ProjectUser>>(store.Object, null, null, null, null, null, null, null, null);
             _mockConfig = new Mock<IConfiguration>();
@@ -57,7 +59,7 @@ namespace ArtPortfolio.Tests.SeedDataTests
             _mockUserManager.Setup(u => u.CreateAsync(It.IsAny<ProjectUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
             _mockUserManager.Setup(u => u.AddClaimsAsync(It.IsAny<ProjectUser>(), It.IsAny<IEnumerable<Claim>>())).ReturnsAsync(IdentityResult.Success);
 
-            _ctx = new ArtPortfolioUserDbContext(dbContextOptions);
+            _ctx = new ArtPortfolioUserDbContext(dbContextOptions, mockSeedData.Object);
             _sut = new SeedData(_ctx, _mockUserManager.Object, _mockConfig.Object);
         }
 
