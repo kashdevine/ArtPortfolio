@@ -97,7 +97,7 @@ namespace ArtPortfolio.Tests
         {
             return new List<ProjectBiography>() 
             { 
-                new ProjectBiography() { Body = "This a is test bio for 1", Title = "Test title 1"},
+                new ProjectBiography() { Body = "This a is test bio for 1", Title = "Test title 1", Selected = true},
                 new ProjectBiography() { Body = "This a is test bio for 2", Title = "Test title 2"},
                 new ProjectBiography() { Body = "This a is test bio for 3", Title = "Test title 3"},
                 new ProjectBiography() { Body = "This a is test bio for 4", Title = "Test title 4"}
